@@ -70,14 +70,18 @@ component displayname="Jira REST API Manager" {
 	 **/
 	public struct function createIssueComment(
 		required string IssueKey,
-		required string Body
+		required string Body,
+		string Author
 	) {
 		/* Build Comment packet. */
 		/* Jira Comment Docs: https://developer.atlassian.com/static/rest/jira/5.0.html#id199362 */
 		var packet = {
 		    "body" = convertHTMLToWiki(arguments.Body)
 		};
-		
+		/* The Jira REST API doesn't (currrently) support sending "author". But, I'm sending it in their GET format in the hope of it working someday... */
+		if ( structKeyExists(arguments,"Author") && len(trim(arguments.Author)) ) {
+			packet["author"] = {"name": trim(arguments.Author)};
+		}
 		/* Get http object. */
 		var httpSvc = getHTTPRequest();
 		/* Set it up. */
