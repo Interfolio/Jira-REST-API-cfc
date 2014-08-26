@@ -1,4 +1,4 @@
-component displayname="Jira REST API Manager" output="false" {
+component displayname="Jira REST API Manager" {
 	
 	/* Jira 5 REST API Docs
 	 * https://developer.atlassian.com/display/JIRADEV/JIRA+REST+API+in+JIRA+5.0
@@ -6,7 +6,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	 * @hint "I am the constructor. Give me the Jira REST API config properties and I'll return myself."
-	 * @output false
 	 **/
 	public component function init( string BaseURL, string ProjectKey, string UserName, string Password ) {
 		variables.BaseURL = arguments.BaseURL;
@@ -19,7 +18,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	 * @hint "I will create an issue in Jira via the REST API and return the key." 
-	 * @output false
 	 **/
 	public string function createIssue(
 		required string Summary,
@@ -69,7 +67,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	 * @hint "I will create a comment on an issue in Jira via the REST API and return the ID." 
-	 * @output false
 	 **/
 	public struct function createIssueComment(
 		required string IssueKey,
@@ -95,7 +92,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	* @hint "I transition an issue in Jira"
-	* @output false
 	**/
 	public void function transitionIssue( required string IssueKey, required string TransitionName ) {
 		var transitionID = getTransitionIDByName( arguments.IssueKey, arguments.TransitionName );
@@ -121,7 +117,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	* @hint "I get a transition id from a name"
-	* @output false
 	**/
 	public string function getTransitionIDByName( required string IssueKey, required string TransitionName ) {
 		var transitionID = "";
@@ -136,7 +131,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	* @hint "I get all the possible transitions for an issue"
-	* @output false
 	**/
 	public array function getAvailableTransitions( required string IssueKey ) {
 		/* Get http object. */
@@ -152,7 +146,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	 * @hint "I will fetch an issue from Jira via the REST API." 
-	 * @output false
 	 **/
 	public struct function getIssue( required string Key ) {
 		/* Get http object. */
@@ -172,7 +165,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	* @hint "I will convert HTML to Jira wiki markup."
-	* @output false
 	**/
 	public string function convertHTMLToWiki( required String markup ) {
 		var wiki = arguments.markup;
@@ -190,7 +182,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	* @hint "I will convert Jira wiki markup to HTML."
-	* @output false
 	**/
 	public string function convertWikiToHTML( required String markup ) {
 		var html = arguments.markup;
@@ -200,7 +191,6 @@ component displayname="Jira REST API Manager" output="false" {
 	
 	/**
 	 * @hint "I will give you a partially populated http request." 
-	 * @output false
 	 **/
 	private component function getHTTPRequest() {
 		var httpSvc = new HTTP( username = variables.UserName, password = variables.Password );
