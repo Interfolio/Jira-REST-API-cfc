@@ -22,11 +22,12 @@ component displayname="Jira REST API Manager" {
 	public string function createIssue(
 		required string Summary,
 		required string Description,
-		required string Assignee,
+		string Assignee,
 		string ProjectKey = variables.ProjectKey,
 		string Type = "Task",
 		string Reporter = variables.UserName,
-		array CustomFields = []
+		array CustomFields = [],
+		array labels = []
 	) {
 		/* Build Issue packet. */
 		/* Jira Issue Docs: https://developer.atlassian.com/static/rest/jira/5.0.html#id199290 */
@@ -43,11 +44,13 @@ component displayname="Jira REST API Manager" {
 				"reporter" = {
 					"name" = arguments.Reporter
 				},
-				"assignee" = {
-					"name" = arguments.Assignee
-				}
+				"labels" = arguments.labels
 			}
 		};
+
+		if(structKeyExists(arguments,"assignee")){
+			packet["assignee"] = arguments.assignee;
+		}
 		/* Add Custom Fields */
 		for (var field in arguments.CustomFields) {
 			packet.fields['customfield_' & field.id] = field.value;
@@ -80,7 +83,7 @@ component displayname="Jira REST API Manager" {
 		};
 		/* The Jira REST API doesn't (currrently) support sending "author". But, I'm sending it in their GET format in the hope of it working someday... */
 		if ( structKeyExists(arguments,"Author") && len(trim(arguments.Author)) ) {
-			packet["author"] = {"name": trim(arguments.Author)};
+			packet["author"] = {"name"= trim(arguments.Author)};
 		}
 		/* Get http object. */
 		var httpSvc = getHTTPRequest();
@@ -106,8 +109,8 @@ component displayname="Jira REST API Manager" {
 		/* Build Transition packet. */
 		/* Jira Transition Docs: http://docs.atlassian.com/jira/REST/latest/#id326996 */
 		var packet = {
-			"transition": {
-				"id": transitionID
+			"transition" = {
+			"id" = transitionID
 			}
 		};
 		/* Get http object. */
