@@ -63,7 +63,12 @@ component displayname="Jira REST API Manager" {
 		httpSvc.addParam( type="body", value=serializeJSON(packet) );
 		/* Post to Jira */
 		var callResult = httpSvc.send( method = "POST", url = variables.RestURL & 'issue' );
-		var response = deserializeJSON(callResult.getPrefix().filecontent);
+		if(left(callResult.getPrefix().statusCode, 1) != 2) {
+			writeDump(var=deserializeJSON(callResult.getPrefix().filecontent));
+			abort;
+		} else {
+			var response = deserializeJSON(callResult.getPrefix().filecontent);
+		}
 		
 		return response.key;
 	}
